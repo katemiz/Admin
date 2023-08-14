@@ -3,9 +3,14 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
+
+use App\Models\User;
 
 class UsersComponent extends Component
 {
+    use WithPagination;
+
 
     public $isAdd = false;
     public $isEdit = false;
@@ -16,12 +21,31 @@ class UsersComponent extends Component
     public $title;
     public $subtitle;
 
+    public $search = '';
+    public $sortField = 'lastname';
+    public $sortDirection = 'asc';
+
 
 
     public function render()
     {
         $this->initialize();
-        return view('pages.users.users-home');
+
+        $users = [];
+
+        if (request('idUser')) {
+            $this->viewUser(request('idUser'));
+        } else {
+
+            $users = User::where('name', 'LIKE', "%$this->search%")
+            ->orWhere('lastname', 'LIKE', "%$this->search%")
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+        }
+        return view('pages.users.users-home',[
+            'users' => $users
+        ]);
+
     }
 
 
