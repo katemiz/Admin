@@ -62,7 +62,7 @@
                     </div>
                 </div> --}}
 
-                <a href="/requirements" class="navbar-item icon-text">
+                <a href="/admin/users" class="navbar-item icon-text">
                     <span class="icon has-text-warning">
                         <x-carbon-group-access />
                     </span>
